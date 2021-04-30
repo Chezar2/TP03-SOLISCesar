@@ -8,19 +8,24 @@
 <h1>Formulario de Carga de Cliente</h1>
 	<form id="formProducto" th:object="${unCliente}" th:action="@{/cliente/guardar}" method="post">
 		
+		<label for="nombreA">Nombre y Apellido</label> 
+			<input type="text" id="nombreApellido" th:field="*{nombreApellido}">
+		<br>
+			<label for="tipo">TipoDocumento</label> 
+			<input type="radio" name="tipo" value="DNI" id="tipo" th:field="*{tipoDocumento}">DNI
+			<input type="radio" name="tipo" value="Pasaporte" id="tipo" th:field="*{tipoDocumento}">Pasaporte
+		<br>
 			<label for="numdoc">Documento</label> 
 			<input type="number"	id="numdoc" th:field="*{nroDocumento}">
 		<br>
-		
-			<label for="fechanac">Nacimiento</label>			
+			<label for="fechanac">Fecha de Nacimiento</label>			
 			<input type="date"	id="fechanac" th:field="*{fechaNacimiento}">
 		<br>
-		
-			<label for="tipo">Tipo</label> 
-			<input type="text" id="tipo" th:field="*{tipoDocumento}">
+		    <label for="fechaU">Fecha Ultima Compra</label>			
+			<input type="date"	id="fechaU" th:field="*{fechaUltimaCompra}">
 		<br>
-		<label for="nombreA">Nombre y Apellido</label> 
-			<input type="text" id="nombreApellido" th:field="*{nombreApellido}">
+			<label for="email">Email</label> 
+			<input type="email" id="email" th:field="*{email}">
 		<br>
 		<label for="password">Contraseña</label> 
 			<input type="password" id="tipo" th:field="*{password}">
@@ -32,10 +37,9 @@
 			<label for="numtel">Telefono</label> 
 			<input type="number" id="numtel" th:field="*{numTelefono}">		
 		<br>
+	   
 		
-			<label for="email">Email</label> 
-			<input type="email" id="email" th:field="*{email}">
-		<br>
+
 
 		<div>
 			<button type="submit" value="Agregar">Agregar</button>
@@ -51,12 +55,12 @@
 				    <tr>
 				      <th>Nro Documento:</th>
 				      <th>Nombre y Apellido:</th>
-				      <th>Fecha:</th>
-				      <th>otraFecha:</th>
+				      <th>FechaNac:</th>
+				      <th>Edad:</th>
+				      <th>Fecha UltimaCompra</th>
 				      <th>Tipo Documento:</th>
 				      <th>Telefono Completo:</th>
 				      <th>E-mail:</th>	
-				       <th>Edad: </th>	
 				       <th>Datos Adicionales </th>	       
 				       			      
 				    </tr>
@@ -64,13 +68,13 @@
 						<td th:text="${cli.nroDocumento}"></td>
 						<td th:text="${cli.nombreApellido}"></td>
 						<td th:text="${cli.fechaNacimiento}"></td>
-						<td th:text="${#temporals.format(cli.fechaNacimiento,'dd/MM/yyyy')}"></td>
+						<td th:text="${cli.edad}"></td>
+						<td th:text="${cli.fechaUltimaCompra}"></td>
 						<td th:text="${cli.tipoDocumento}"></td>
 						<td th:text="${cli.numTelefonoCompleto}"></td>
 						<td th:text="${cli.email}"></td>		
-						<td th:text="${cli.edad}"></td>		
-						<!--	<td th:text="${cli.edad}"></td>	
-					<td th:text="${cli.NextCumple}"></td>	-->	
+						<td th:text="${cli.datosAdicionales}"></td>		
+					
 					</tr>
 				</table>
 			</div>

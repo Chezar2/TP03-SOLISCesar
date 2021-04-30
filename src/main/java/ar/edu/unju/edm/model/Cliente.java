@@ -16,12 +16,14 @@ public class Cliente {
 	private String password;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate fechaNacimiento;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate fechaUltimaCompra;
+	private int edad;
 	
-	//falta edad calculada y habilitar fechaUltimaCompra	
-
 	private int codigoAreaTelefono;
 	private int numTelefono;
 	private String  numTelefonoCompleto;
+	private String datosAdicionales;
 	//Calendar
 	//private Date fechaUltimCompra = new Date();
 	
@@ -32,7 +34,7 @@ public class Cliente {
 		// TODO Auto-generated constructor stub
 	}
 
-public int getEdad() {
+/*public int getEdad() {
 	
 int edad=0;
 LocalDate hoy = LocalDate.now();
@@ -41,6 +43,8 @@ edad = periodo.getYears();
 
 return edad;
 }
+	
+	
 
 public int settiempoRestante() {
 	
@@ -51,10 +55,34 @@ public int settiempoRestante() {
 	{}
 	return 0;
 }
+	*/
 	
 	
 	
-	
+
+public int getEdad() {
+	return edad;
+}
+
+public String getDatosAdicionales() {
+	return datosAdicionales;
+}
+
+public void setDatosAdicionales(String datosAdicionales) {
+	this.datosAdicionales = datosAdicionales;
+}
+
+public LocalDate getFechaUltimaCompra() {
+	return fechaUltimaCompra;
+}
+
+public void setFechaUltimaCompra(LocalDate fechaUltimaCompra) {
+	this.fechaUltimaCompra = fechaUltimaCompra;
+}
+
+public void setEdad(int edad) {
+	this.edad = edad;
+}
 
 	public String getTipoDocumento() {
 		return tipoDocumento;
