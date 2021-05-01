@@ -2,6 +2,7 @@ package ar.edu.unju.edm.service.imp;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,41 +23,49 @@ public class ClienteServiceImp implements IClienteService{
 	@Override
 	public void guardarCliente(Cliente unCliente) {
 		// TODO Auto-generated method stub
+		// fecha para cumple
 		LocalDate fechaNac= unCliente.getFechaNacimiento();
 		LocalDate fechaAhora = LocalDate.now();
-		
+		//fecha desde ultima compra
 		LocalDate fechaUlti = unCliente.getFechaUltimaCompra();
 		//sigue el orden de fecha anterior y fecha posterior (sig line)
+	
+		//--calculo edad--
 		Period periodo = Period.between(fechaNac, fechaAhora);
 		unCliente.setEdad(periodo.getYears());
-		String datos= "TUComp: ";
+		
+		//--calculo de tiempo desde ultima compra--
+		String datos= "T_desdeUltimaComp: ";
 		Period periodo2 = Period.between(fechaUlti, fechaAhora);
-		datos += (periodo.getMonths()+"-"+periodo.getMonths()+"-"+periodo.getDays()+"ThC :");
+		datos += (periodo2.getYears()+"-"+periodo2.getMonths()+"-"+periodo2.getDays()+" T_hastaCumple :");
 		
-		if(fechaAhora.getMonthValue()> fechaNac.getMonthValue()) {
-		
-			fechaNac = LocalDate.of(fechaNac.getYear()+unCliente.getEdad(),fechaNac.getMonthValue(),fechaNac.getDayOfMonth());
-		}
-		else if (fechaAhora.getMonthValue() == fechaNac.getMonthValue()) {
-			if (fechaAhora.getDayOfMonth()> fechaNac.getDayOfMonth())
-			{
-				fechaNac = LocalDate.of(fechaNac.getYear()+unCliente.getEdad(),fechaNac.getMonthValue(),fechaNac.getDayOfMonth());
-			}
-			else {
-				periodo = Period.between(fechaNac, fechaAhora );
-			}
-		}
-		else
-		{
-			periodo = Period.between(fechaNac, fechaAhora);
-		}
-		
-	
-		datos += (periodo.getYears()+"-"+periodo.getMonths()+"-"+periodo.getDays()+" ");
-		unCliente.setDatosAdicionales(datos);
-		
-		listadoClientes.add(unCliente);	
+		//--calculo hasta siguiente cumpleaños--
+ 
+     
+       
+        //fecha de nc mejorada 
+        LocalDate nextBDay = fechaNac.withYear(fechaAhora.getYear());
 
+        //Si el cumpleaños ya ocurrió este año, agrega 1 año
+        if (nextBDay.isBefore(fechaAhora) || nextBDay.isEqual(fechaAhora)) {
+            nextBDay = nextBDay.plusYears(1);
+        }
+        
+        Period p = Period.between(fechaAhora, nextBDay);
+        long totalDias = ChronoUnit.DAYS.between(fechaAhora, nextBDay);
+
+       //Cuando totalDias=365 hoy es el cumpleaños
+
+        if (totalDias == 365)
+        {
+            datos += (p.getYears()+"-"+p.getMonths()+"-"+p.getDays()+" Feliz Cumple!");
+        } else
+        {
+            datos += (p.getYears()+"-"+p.getMonths()+"-"+ p.getDays()+" ");    
+        }
+
+		unCliente.setDatosAdicionales(datos);
+		listadoClientes.add(unCliente);	
 	}
 
 	@Override
