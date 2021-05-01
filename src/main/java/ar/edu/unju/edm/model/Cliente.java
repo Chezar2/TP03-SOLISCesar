@@ -3,6 +3,7 @@ package ar.edu.unju.edm.model;
 import java.time.LocalDate;
 //import java.util.Date;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
@@ -23,7 +24,6 @@ public class Cliente {
 	private int codigoAreaTelefono;
 	private int numTelefono;
 	private String  numTelefonoCompleto;
-	private String datosAdicionales;
 	//Calendar
 	//private Date fechaUltimCompra = new Date();
 	
@@ -33,44 +33,51 @@ public class Cliente {
 	public Cliente() {
 		// TODO Auto-generated constructor stub
 	}
-
-/*public int getEdad() {
-	
-int edad=0;
-LocalDate hoy = LocalDate.now();
-Period periodo = Period.between(this.fechaNacimiento, hoy );
-edad = periodo.getYears(); 
-
-return edad;
-}
-	
-	
-
-public int settiempoRestante() {
-	
-	LocalDate hoy = LocalDate.now();
-	if(this.fechaNacimiento.getMonthValue()<LocalDate.now().getMonthValue())
-	{}
-	else
-	{}
-	return 0;
-}
-	*/
-	
-	
-	
-
 public int getEdad() {
+	int edad=0;
+	LocalDate fechaAhora = LocalDate.now();
+	Period periodo = Period.between(fechaNacimiento, fechaAhora);
+	edad=periodo.getYears();
 	return edad;
 }
 
+public String getTiempoDeUltimaCompra() {
+	//--calculo de tiempo desde ultima compra--
+	LocalDate fechaAhora = LocalDate.now();
+	//String datos= "T_desdeUltimaComp: ";
+	Period periodo = Period.between(fechaUltimaCompra, fechaAhora);
+	
+	return " T desde U compra Años: "+periodo.getYears()+" Meses: "+periodo.getMonths()+" Dias: "+periodo.getDays();
+}
+public String getTiempoHastaCumple() {
+		
+	LocalDate fechaAhora = LocalDate.now();
+    LocalDate nextBDay = fechaNacimiento.withYear(fechaAhora.getYear());
+	//--calculo hasta siguiente cumpleaños--
+ 
+    //Si el cumpleaños ya ocurrió este año, agrega 1 año
+    if (nextBDay.isBefore(fechaAhora) || nextBDay.isEqual(fechaAhora)) {
+        nextBDay = nextBDay.plusYears(1);
+    }
+    Period p = Period.between(fechaAhora, nextBDay);
+    long totalDias = ChronoUnit.DAYS.between(fechaAhora, nextBDay);
+
+   //Cuando totalDias=365 hoy es el cumpleaños
+
+    if (totalDias == 365)
+    {
+        return " Feliz Cumple! Restan: "+p.getYears()+" años, "+p.getMonths()+" meses, "+p.getDays()+" dias";
+    } else
+    {
+    	 return "; NextB, Restan: "+p.getYears()+" años, "+p.getMonths()+" meses, "+p.getDays()+" dias";
+    }
+	
+}
 public String getDatosAdicionales() {
-	return datosAdicionales;
+	//creí que seria buena practica poner hasta siguiente cumpleaños y desde ultima compra por separado
+	return getTiempoDeUltimaCompra()+getTiempoHastaCumple();
 }
 
-public void setDatosAdicionales(String datosAdicionales) {
-	this.datosAdicionales = datosAdicionales;
-}
 
 public LocalDate getFechaUltimaCompra() {
 	return fechaUltimaCompra;
@@ -80,9 +87,6 @@ public void setFechaUltimaCompra(LocalDate fechaUltimaCompra) {
 	this.fechaUltimaCompra = fechaUltimaCompra;
 }
 
-public void setEdad(int edad) {
-	this.edad = edad;
-}
 
 	public String getTipoDocumento() {
 		return tipoDocumento;
